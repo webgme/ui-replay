@@ -2,6 +2,7 @@
 /**
  * @author pmeijer / https://github.com/pmeijer
  */
+
 define([
     'panels/UIReplay/UIReplayControllers',
     './UIReplayDialog',
@@ -11,7 +12,7 @@ define([
 
     //var STATUS_CLASSES = 'loading success unavailable error';
 
-    var UIRecorderCommitBadge = function (containerEl, client, params) {
+    var UIReplayCommitBadge = function (containerEl, client, params) {
         var self = this;
         this._client = client;
         this._commitHash = params.id;
@@ -46,7 +47,7 @@ define([
         });
     };
 
-    UIRecorderCommitBadge.prototype._showReplayDialog = function () {
+    UIReplayCommitBadge.prototype._showReplayDialog = function () {
         (new UIReplayDialog(this.client)).show({
             client: this._client,
             startCommit: this._commitHash,
@@ -54,10 +55,10 @@ define([
         });
     };
 
-    UIRecorderCommitBadge.prototype.destroy = function () {
+    UIReplayCommitBadge.prototype.destroy = function () {
         this.$el.off('click');
         this._destroyed = true;
     };
 
-    return UIRecorderCommitBadge;
+    return UIReplayCommitBadge;
 });

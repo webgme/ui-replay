@@ -9,17 +9,13 @@
 
 define([
     'js/logger',
-    'panels/UIRecorder/UIReplayControllers',
+    'panels/UIReplay/UIReplayControllers',
     'text!./templates/UIReplayDialog.html'
 ], function (Logger, RecordReplayControllers, dialogTemplate) {
     'use strict';
 
-    var STATE_CHANGE_OPTIONS = {
-
-        },
-        COMMIT_CHANGE_OPTIONS = {
-
-        };
+    var STATE_CHANGE_OPTIONS = {},
+        COMMIT_CHANGE_OPTIONS = {};
 
     function UIReplayDialog(mainLogger) {
         this._logger = mainLogger ? mainLogger.fork('UIReplayDialog') : Logger.create(
@@ -83,22 +79,22 @@ define([
         this._stepForwardBtn.prop('disabled', true);
         this._stepBackBtn.prop('disabled', true);
 
-        this._recBadge.on('click', function () {
-            console.log('herro there');
-        });
+        // this._recBadge.on('click', function () {
+        //     console.log('herro there');
+        // });
 
         this._detailsBtn.on('click', function () {
             self._detailsBtn.removeClass('fa-minus fa-plus');
 
-           if (self._footer.hasClass('hidden')) {
-               self._dialogContent.width(400);
-               self._footer.removeClass('hidden');
-               self._detailsBtn.addClass('fa-minus');
-           } else {
-               self._dialogContent.width(180);
-               self._footer.addClass('hidden');
-               self._detailsBtn.addClass('fa-plus');
-           }
+            if (self._footer.hasClass('hidden')) {
+                self._dialogContent.width(400);
+                self._footer.removeClass('hidden');
+                self._detailsBtn.addClass('fa-minus');
+            } else {
+                self._dialogContent.width(180);
+                self._footer.addClass('hidden');
+                self._detailsBtn.addClass('fa-plus');
+            }
         });
 
         this._dialog.on('hide.bs.modal', function () {
@@ -148,7 +144,7 @@ define([
         }
 
         promise
-            .then(function(data) {
+            .then(function (data) {
                 var message,
                     title;
 
@@ -161,7 +157,7 @@ define([
                 }
 
                 if (data.type === 'commit') {
-                    message =  data.commit.message;
+                    message = data.commit.message;
                     if (forward) {
                         title = '"' + data.commit.updater[0] + '" made commit:';
                     } else {
@@ -196,7 +192,8 @@ define([
     };
 
     UIReplayDialog.prototype.setBadgeStatus = function () {
-        this._recBadge.text((this._player.stateIndex + this._player.commitIndex + 2) + ' / ' + this._player.recording.length * 2);
+        this._recBadge.text((this._player.stateIndex + this._player.commitIndex + 2) + ' / ' +
+            this._player.recording.length * 2);
     };
 
     return UIReplayDialog;

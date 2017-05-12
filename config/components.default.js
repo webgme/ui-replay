@@ -1,4 +1,4 @@
-/*globals*/
+/*globals module, require*/
 /**
  * @author pmeijer / https://github.com/pmeijer
  */

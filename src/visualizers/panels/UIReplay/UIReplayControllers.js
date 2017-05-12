@@ -5,7 +5,11 @@
  * @author pmeijer / https://github.com/pmeijer
  */
 
-define(['q', 'superagent', 'js/Constants'], function (Q, superagent, CONSTANTS) {
+define([
+    'q',
+    'superagent',
+    'js/Constants'
+], function (Q, superagent, CONSTANTS) {
     'use strict';
 
     var url = '';

@@ -1,14 +1,15 @@
 /*jshint node:true, mocha:true*/
 
-
 describe('UIRecorder', function () {
+    'use strict';
+
     var testFixture = require('../../globals'),
         expect = testFixture.expect,
         gmeConfig = testFixture.getGmeConfig(),
         logger = testFixture.logger.fork('UIRecorder'),
         Q = testFixture.Q,
         mongo = require('mongodb'),
-        controller = requireJS('panels/UIRecorder/RecordReplayControllers'),
+        controller = testFixture.requirejs('panels/UIReplay/UIReplayControllers'),
         server = testFixture.WebGME.standaloneServer(gmeConfig),
         commits = [],
         wRec,
@@ -53,7 +54,7 @@ describe('UIRecorder', function () {
                         logger: logger,
                         gmeConfig: gmeConfig
                     })
-                ])
+                ]);
             })
             .then(function (irs) {
                 wRec = irs[0].project;
@@ -309,7 +310,7 @@ describe('UIRecorder', function () {
 
         controller.addRecording(onNewCommitData)
             .then(function () {
-                return controller.getRecordings(wRec.projectId, commits[1]._id, commits[1]._id)
+                return controller.getRecordings(wRec.projectId, commits[1]._id, commits[1]._id);
             })
             .then(function (records) {
                 expect(records.length).to.equal(1);

@@ -11,7 +11,7 @@ define([
     'js/Controls/PopoverBox',
     'js/Dialogs/ProjectRepository/ProjectRepositoryDialog',
     './UIReplayDialog',
-    'panels/UIRecorder/UIReplayControllers',
+    'panels/UIReplay/UIReplayControllers',
     'css!./styles/UIReplay.css'
 ], function (Logger, DropDownMenu, PopoverBox, ProjectRepositoryDialog, UIReplayDialog, RecordReplayControllers) {
 
@@ -60,11 +60,9 @@ define([
             if (branchName) {
                 setTimeout(function () {
                     if (branchName === self._client.getActiveBranchName()) {
-                        RecordReplayControllers.getBranchStatus(self._client.getActiveProjectId(), branchName,
-                            function (err, status) {
-                                if (err) {
-                                    self._logger.error(err);
-                                } else if (status.commitIndex !== 0 && status.totalEntries > 0) {
+                        RecordReplayControllers.getBranchStatus(self._client.getActiveProjectId(), branchName)
+                            .then(function (status) {
+                                if (status.commitIndex !== 0 && status.totalEntries > 0) {
                                     if (status.commitHash) {
                                         self._popoverBox.show('There are ' + (status.commitIndex) +
                                             ' changes since your last one. Playback?',
@@ -76,6 +74,9 @@ define([
                                             self._popoverBox.alertLevels.info, DELAY * 4);
                                     }
                                 }
+                            })
+                            .catch(function (err) {
+                                self._logger.error(err);
                             });
                     }
                 }, DELAY);
@@ -118,7 +119,7 @@ define([
                 self._client.notifyUser({
                     message: 'No project is open - can\'t initiate playback',
                     severity: 'warning'
-                })
+                });
             }
         };
     };

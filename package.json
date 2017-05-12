@@ -22,6 +22,8 @@
     "istanbul": "^0.4.5",
     "rimraf": "^2.4.0",
     "chai": "^3.0.0",
+    "jscs": "3.0.7",
+    "jshint": "2.9.3",
     "webgme": "github:webgme/webgme#client-select-commit"
   },
   "dependencies": {
