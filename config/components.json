@@ -1,0 +1,16 @@
+{
+  "GenericUIProjectRepositoryWidget": {
+    "commitBadges": {
+      "UIReplayCommitBadge": {
+        "path": "widgets/UIRecorder/UIReplayCommitBadge"
+      }
+    }
+  },
+  "GenericUIFooterControlsPanel": {
+    "extraWidgets": {
+      "UIReplayWidget": {
+        "path": "widgets/UIRecorder/UIReplayWidget"
+      }
+    }
+  }
+}

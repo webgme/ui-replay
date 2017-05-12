@@ -1,0 +1,24 @@
+{
+  "components": {
+    "visualizers": {
+      "UIReplay": {
+        "src": "panels/UIReplay/UIReplayControllers",
+        "title": "UIReplay",
+        "panel": "src/visualizers/panels/UIReplay",
+        "secondary": true,
+        "widget": "src/visualizers/widgets/UIReplay"
+      }
+    },
+    "routers": {
+      "UIRecorder": {
+        "src": "src/routers/UIRecorder",
+        "test": "test/routers/UIRecorder",
+        "mount": "routers/UIRecorder"
+      }
+    }
+  },
+  "dependencies": {
+    "visualizers": {},
+    "routers": {}
+  }
+}

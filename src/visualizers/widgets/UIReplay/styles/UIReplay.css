@@ -1,0 +1,42 @@
+i.ui-replay-commit-status-icon.loading {
+  color: lightgrey; }
+i.ui-replay-commit-status-icon.success {
+  color: lightgreen;
+  cursor: pointer; }
+i.ui-replay-commit-status-icon.error {
+  color: lightcoral; }
+i.ui-replay-commit-status-icon.unavailable {
+  color: #b0b0b0; }
+
+div.ui-replay-dialog {
+  width: 400px; }
+  div.ui-replay-dialog .modal-dialog {
+    width: 400px;
+    margin: 0; }
+  div.ui-replay-dialog .modal-content .toggle-details-btn {
+    font-size: 14px;
+    float: right;
+    margin-top: 4px;
+    margin-right: 10px;
+    color: #000;
+    cursor: pointer;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.2; }
+    div.ui-replay-dialog .modal-content .toggle-details-btn:hover {
+      opacity: 0.5; }
+  div.ui-replay-dialog .modal-content .modal-footer .info-message {
+    display: inline-block;
+    width: 95%;
+    margin-bottom: 2ex;
+    margin-left: 0.5ex;
+    opacity: 0.90; }
+  div.ui-replay-dialog .modal-content .modal-footer .status-header {
+    font-weight: bold;
+    text-align: left;
+    opacity: 0.6; }
+  div.ui-replay-dialog .modal-content .modal-footer .status-area {
+    text-align: left; }
+  div.ui-replay-dialog .modal-content .modal-footer.hidden {
+    display: none; }
+
+/*# sourceMappingURL=UIReplay.css.map */
