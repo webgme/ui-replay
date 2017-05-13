@@ -105,7 +105,11 @@ function initialize(middlewareOpts) {
     });
 
     router.get('/:ownerId/:projectName/recordings/:startCommit...:endCommit', function (req, res, next) {
-        var data = {},
+        var data = {
+                projectId: null,
+                number: parseInt(req.query.n, 10) || 100,
+                start: '#' + req.params.endCommit
+            },
             commits = [];
 
         ensureProjectAccess('read', req, res)
@@ -113,11 +117,7 @@ function initialize(middlewareOpts) {
                 data.projectId = info.projectId;
                 data.username = info.userId;
 
-                return middlewareOpts.safeStorage.openProject(data);
-            })
-            .then(function (project) {
-
-                return project.getHistory('#' + req.params.endCommit, parseInt(req.query.n, 10) || 100);
+                return middlewareOpts.safeStorage.getHistory(data);
             })
             .then(function (history) {
                 var found = false,
@@ -173,7 +173,11 @@ function initialize(middlewareOpts) {
     });
 
     router.get('/:ownerId/:projectName/branchStatus/:branchName', function (req, res, next) {
-        var data = {},
+        var data = {
+            projectId: null,
+            number: parseInt(req.query.n, 10) || 100,
+            start: req.params.branchName
+        },
             result = {
                 totalEntries: null,
                 commitIndex: -1,
@@ -185,10 +189,7 @@ function initialize(middlewareOpts) {
                 data.projectId = info.projectId;
                 data.username = info.userId;
 
-                return middlewareOpts.safeStorage.openProject(data);
-            })
-            .then(function (project) {
-                return project.getHistory(req.params.branchName, parseInt(req.query.n, 10) || 100);
+                return middlewareOpts.safeStorage.getHistory(data);
             })
             .then(function (history) {
                 var i;

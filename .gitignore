@@ -32,3 +32,5 @@ blob-local-storage/
 
 .idea
 coverage
+
+*.css.map
