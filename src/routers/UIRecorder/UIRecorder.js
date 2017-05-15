@@ -22,7 +22,7 @@ var CONFIG_ID = 'UIRecorderRouter',
     getProjectId = requireJS('common/storage/util').getProjectIdFromOwnerIdAndProjectName,
     defaultConfig = {
         mongo: {
-            uri: 'mongodb://127.0.0.1:27017/UIRecordingData',
+            uri: 'mongodb://127.0.0.1:27017/webgme-ui-recording-data',
             options: {}
         }
     },

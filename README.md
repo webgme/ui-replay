@@ -23,12 +23,27 @@ The router handles insertions of record data and exposes the record data to the 
 webgme import router UIRecorder webgme-ui-replay
 ```
 
+To configure the database where the recording data is persisted (should not be the same as the webgme models). Add the following setting to your component settings..
+```
+{
+ ...,
+  "UIRecorderRouter": {
+    "mongo": {
+      "uri": "mongodb://127.0.0.1:27017/webgme-ui-recording-data",
+      "options": {}
+    }
+  },
+ ...
+}
+```
+
+
 #### Visualizer Widgets
-To import the widgets two steps are required - first make sure the widgets are available in your ui.
+To import the widgets two steps are required - first make sure the widgets are available from the server.
 ```
 webgme import viz UIReplay webgme-ui-replay
 ```
-Secondly make them attach to the footer and project repository widget by adding the following to your components settings.
+Secondly make them attach to the footer and project repository widget by adding (or updating) the following to your components settings.
 ```
 {
  ...,
@@ -47,4 +62,16 @@ Secondly make them attach to the footer and project repository widget by adding 
    }
  },
  ...
+}
 ```
+
+## Developers
+
+#### Publish new release at npm
+ ```
+ npm version 0.1.0 -m "Release %s"
+ git push origin master
+ git checkout v0.1.0
+ git push origin v0.1.0
+ npm publish ./
+ ```
