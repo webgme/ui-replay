@@ -10,6 +10,10 @@
     "collaboration",
     "webgme-component"
   ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/webgme/ui-replay.git"
+  },
   "license": "MIT",
   "scripts": {
     "start": "node app.js",

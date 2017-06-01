@@ -59,18 +59,18 @@ define([
             self._popoverBox.hide();
             if (branchName) {
                 setTimeout(function () {
-                    if (branchName === self._client.getActiveBranchName()) {
+                    if (branchName === self._client.getActiveBranchName() && self._client.getActiveProjectId()) {
                         RecordReplayControllers.getBranchStatus(self._client.getActiveProjectId(), branchName)
                             .then(function (status) {
                                 if (status.commitIndex !== 0 && status.totalEntries > 0) {
                                     if (status.commitHash) {
                                         self._popoverBox.show('There are ' + (status.commitIndex) +
-                                            ' changes since your last one. Playback?',
+                                            ' changes since your last one.',
                                             self._popoverBox.alertLevels.info, DELAY * 4);
                                         self._commitHash = status.commitHash;
                                     } else {
                                         self._popoverBox.show('There are more than ' + (status.totalEntries) +
-                                            ' changes since your last one. Playback?',
+                                            ' changes since your last one.',
                                             self._popoverBox.alertLevels.info, DELAY * 4);
                                     }
                                 }
