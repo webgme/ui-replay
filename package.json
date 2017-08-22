@@ -22,7 +22,7 @@
   },
   "version": "0.1.1",
   "peerDependencies": {
-    "webgme": ">=2.13.1"
+    "webgme": ">=2.16.0"
   },
   "devDependencies": {
     "mocha": "^2.2.5",

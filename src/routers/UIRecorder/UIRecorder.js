@@ -13,12 +13,11 @@
 'use strict';
 
 // http://expressjs.com/en/guide/routing.html
-var CONFIG_ID = 'UIRecorderRouter',
+var CONFIG_ID = 'UIRecorder',
     express = require('express'),
     router = express.Router(),
     Q = require('q'),
     mongodb = require('mongodb'),
-    webgme = require('webgme'),
     getProjectId = requireJS('common/storage/util').getProjectIdFromOwnerIdAndProjectName,
     defaultConfig = {
         mongo: {
@@ -26,6 +25,7 @@ var CONFIG_ID = 'UIRecorderRouter',
             options: {}
         }
     },
+    gmeConfig,
     logger,
     config,
     dbConn;
@@ -48,6 +48,8 @@ function initialize(middlewareOpts) {
     var ensureAuthenticated = middlewareOpts.ensureAuthenticated,
         getUserId = middlewareOpts.getUserId,
         gmeAuth = middlewareOpts.gmeAuth;
+
+    gmeConfig = middlewareOpts.gmeConfig;
 
     logger = middlewareOpts.logger.fork('UIRecorder');
     logger.debug('initializing ...');
@@ -241,26 +243,25 @@ function initialize(middlewareOpts) {
  * @param {function} callback
  */
 function start(callback) {
-    webgme.getComponentsJson(logger)
-        .then(function (components) {
-            var dbDeferred = Q.defer();
-            config = defaultConfig;
-            if (components.hasOwnProperty(CONFIG_ID)) {
-                config = components[CONFIG_ID];
-            }
+    var dbDeferred = Q.defer();
+    config = defaultConfig;
 
-            mongodb.MongoClient.connect(config.mongo.uri, config.mongo.options, function (err, db) {
-                if (err) {
-                    dbDeferred.reject(err);
-                } else {
-                    dbConn = db;
-                    dbDeferred.resolve();
-                }
-            });
+    if (typeof gmeConfig.rest.components.hasOwnProperty[CONFIG_ID] === 'object' &&
+        gmeConfig.rest.components[CONFIG_ID].options) {
 
-            return dbDeferred.promise;
-        })
-        .nodeify(callback);
+        config = gmeConfig.rest.components[CONFIG_ID].options;
+    }
+
+    mongodb.MongoClient.connect(config.mongo.uri, config.mongo.options, function (err, db) {
+        if (err) {
+            dbDeferred.reject(err);
+        } else {
+            dbConn = db;
+            dbDeferred.resolve();
+        }
+    });
+
+    return dbDeferred.promise.nodeify(callback);
 }
 
 /**

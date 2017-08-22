@@ -12,7 +12,10 @@ define([
 ], function (Q, superagent, CONSTANTS) {
     'use strict';
 
-    var url = '';
+    var ROUTER_ID = 'UIRecorder',
+        url = '',
+        routePath =  '/' + WebGMEGlobal.gmeConfig.rest.components[ROUTER_ID].mount + '/';
+
     // This is only for tests on the server..
     function _setUrl(serverUrl) {
         url = serverUrl;
@@ -38,7 +41,7 @@ define([
             changedNodes: cData.data.commitData.changedNodes
         };
 
-        superagent.put(url + '/routers/UIRecorder/' + project[0] + '/' + project[1] + '/recording')
+        superagent.put(url + routePath + project[0] + '/' + project[1] + '/recording')
             .send(data)
             .end(function (err) {
                 if (err) {
@@ -55,7 +58,7 @@ define([
         var deferred = Q.defer(),
             project = projectId.split('+');
 
-        superagent.get(url + '/routers/UIRecorder/' + project[0] + '/' + project[1] + '/status/' + commitHash.slice(1))
+        superagent.get(url + routePath + project[0] + '/' + project[1] + '/status/' + commitHash.slice(1))
             .end(function (err, result) {
                 if (err) {
                     deferred.reject(err);
@@ -71,7 +74,7 @@ define([
         var deferred = Q.defer(),
             project = projectId.split('+');
 
-        superagent.get(url + '/routers/UIRecorder/' + project[0] + '/' + project[1] + '/branchStatus/' + branchName)
+        superagent.get(url + routePath + project[0] + '/' + project[1] + '/branchStatus/' + branchName)
             .query({n: maxEntriesToCheck || 100})
             .end(function (err, result) {
                 if (err) {
@@ -88,8 +91,8 @@ define([
         var deferred = Q.defer(),
             project = projectId.split('+');
 
-        superagent.get(url + '/routers/UIRecorder/' + project[0] + '/' + project[1] +
-            '/recordings/' + startCommit.slice(1) + '...' + endCommit.slice(1))
+        superagent.get(url + routePath + project[0] + '/' + project[1] + '/recordings/' +
+            startCommit.slice(1) + '...' + endCommit.slice(1))
             .query({n: maxEntriesToCheck || 100})
             .end(function (err, result) {
                 if (err) {
