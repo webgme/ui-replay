@@ -36,13 +36,13 @@ describe('UIRecorder', function () {
                 gmeAuth = gmeAuth_;
                 storage = testFixture.getMongoStorage(logger, gmeConfig, gmeAuth);
                 return Q.allDone([
-                    testFixture.WebGME.getComponentsJson(logger),
                     storage.openDatabase()
                 ]);
             })
-            .then(function (res) {
+            .then(function () {
                 return Q.ninvoke(mongo.MongoClient, 'connect',
-                    res[0].UIRecorderRouter.mongo.uri, res[0].UIRecorderRouter.mongo.options);
+                    gmeConfig.rest.components.UIRecorder.options.mongo.uri,
+                    gmeConfig.rest.components.UIRecorder.options.mongo.options);
             })
             .then(function (dbConn_) {
                 dbConn = dbConn_;
@@ -79,12 +79,27 @@ describe('UIRecorder', function () {
             })
             .then(function () {
                 return Q.allDone([
-                    Q.ninvoke(dbConn, 'dropCollection', wRec.projectId),
                     wRec.createBranch('b1', commits[0]._id),
                     wRec.createBranch('b2', commits[1]._id),
                     wRec.createBranch('b3', commits[2]._id),
                     wRec.createBranch('b4', commits[3]._id)
                 ]);
+            })
+            .then(function () {
+                var deferred = Q.defer();
+                Q.ninvoke(dbConn, 'dropCollection', wRec.projectId)
+                    .then(function () {
+                        deferred.resolve(true);
+                    })
+                    .catch(function (err) {
+                        if (err.ok === 0) { // http://docs.mongodb.org/manual/reference/method/db.collection.drop/
+                            deferred.resolve(false);
+                        } else {
+                            deferred.reject(err);
+                        }
+                    });
+
+                return deferred.promise;
             })
             .then(function () {
                 return Q.ninvoke(dbConn, 'collection', wRec.projectId);

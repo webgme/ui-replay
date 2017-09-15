@@ -246,7 +246,7 @@ function start(callback) {
     var dbDeferred = Q.defer();
     config = defaultConfig;
 
-    if (typeof gmeConfig.rest.components.hasOwnProperty[CONFIG_ID] === 'object' &&
+    if (typeof gmeConfig.rest.components[CONFIG_ID] === 'object' &&
         gmeConfig.rest.components[CONFIG_ID].options) {
 
         config = gmeConfig.rest.components[CONFIG_ID].options;
