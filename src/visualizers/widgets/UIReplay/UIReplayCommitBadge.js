@@ -13,9 +13,19 @@ define([
     //var STATUS_CLASSES = 'loading success unavailable error';
 
     var UIReplayCommitBadge = function (containerEl, client, params) {
-        var self = this;
+        var self = this,
+            index = params.index;
+
         this._client = client;
         this._commitHash = params.id;
+
+        if (typeof index === 'number') {
+            // Add some margins just in case.
+            this._n = index > 90 ? index + 20 : 100;
+        } else {
+            // Until webgme v2.18.0 look through 300 commits.
+            this._n = 300;
+        }
 
         this._destroyed = false;
         this.$el = $('<i>', {
@@ -51,7 +61,8 @@ define([
         (new UIReplayDialog(this.client)).show({
             client: this._client,
             startCommit: this._commitHash,
-            endCommit: this._client.getActiveCommitHash()
+            endCommit: this._client.getActiveCommitHash(),
+            n: this._n
         });
     };
 

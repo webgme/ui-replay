@@ -38,6 +38,7 @@ define([
      * @param {string} options.startCommit
      * @param {string} options.endCommit
      * @param {object} options.client
+     * @param {number} [options.n=100] - number of commits to look through
      * @param {function} [fnCallback]
      */
     UIReplayDialog.prototype.show = function (options, fnCallback) {
@@ -107,7 +108,7 @@ define([
 
         this._dialog.modal('show');
 
-        this._player.loadRecordings(this._currentProjectId, options.startCommit, options.endCommit, 100,
+        this._player.loadRecordings(this._currentProjectId, options.startCommit, options.endCommit, options.n || 100,
             function (err) {
                 if (err) {
                     self._logger.error(err);

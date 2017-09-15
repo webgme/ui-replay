@@ -12,9 +12,6 @@ var config = require('webgme/config/config.default'),
 
 config.visualization.panelPaths.push(__dirname + '/../src/visualizers/panels');
 
-
-config.rest.components['routers/UIRecorder'] = __dirname + '/../src/routers/UIRecorder/UIRecorder.js';
-
 // Visualizer descriptors
 config.visualization.visualizerDescriptors.push(__dirname + '/../src/visualizers/Visualizers.json');
 // Add requirejs paths

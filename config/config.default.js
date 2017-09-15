@@ -9,5 +9,16 @@ var config = require('./config.webgme'),
 
 config.authentication.enable = true;
 
+config.rest.components.UIRecorder = {
+    src: __dirname + '/../src/routers/UIRecorder/UIRecorder.js',
+    mount: 'routers/UIRecorder',
+    options: {
+        mongo: {
+            uri: 'mongodb://127.0.0.1:27017/webgme-ui-recording-data',
+            options: {}
+        }
+    }
+};
+
 validateConfig(config);
 module.exports = config;

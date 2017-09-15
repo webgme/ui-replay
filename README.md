@@ -23,17 +23,17 @@ The router handles insertions of record data and exposes the record data to the 
 webgme import router UIRecorder webgme-ui-replay
 ```
 
-To configure the database where the recording data is persisted (should not be the same as the webgme models). Add the following setting to your component settings..
+To configure the database where the recording data is persisted (should not be the same as the webgme models)
 ```
-{
- ...,
-  "UIRecorderRouter": {
-    "mongo": {
-      "uri": "mongodb://127.0.0.1:27017/webgme-ui-recording-data",
-      "options": {}
+gmeConfig.rest.components.UIRecorder = {
+    src: __dirname + '/../src/routers/UIRecorder/UIRecorder.js',
+    mount: 'routers/UIRecorder',
+    options: {
+        mongo: {
+            uri: 'mongodb://127.0.0.1:27017/webgme-ui-recording-data',
+            options: {}
+        }
     }
-  },
- ...
 }
 ```
 
