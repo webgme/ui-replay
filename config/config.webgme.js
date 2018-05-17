@@ -21,6 +21,5 @@ config.requirejsPaths = {
 };
 
 
-config.mongo.uri = 'mongodb://127.0.0.1:27017/webgme_ui_replay';
 validateConfig(config);
 module.exports = config;

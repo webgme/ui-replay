@@ -121,6 +121,28 @@ define([
             self.recording = [];
         };
 
+        const loadById = (id, callback) => {
+            const deferred = Q.defer();
+
+            const uiId = client.addUI(null, (events) => {
+                let nodeObj = null;
+
+                for (let i = 0; i < events.length; i += 1) {
+                    if (events[i].etype === 'load') {
+                        nodeObj = client.getNode(events[i].eid);
+                    }
+                }
+
+                client.removeUI(uiId);
+                // It could reject if nodeObj === null as well.
+                deferred.resolve(nodeObj);
+            });
+
+            client.updateTerritory(uiId, {[id]: {children: 0}});
+
+            return deferred.promise.nodeify(callback);
+        };
+
         this.loadRecordings = function (projectId, startCommit, endCommit, maxNumber, callback) {
             return getRecordings(projectId, startCommit, endCommit, maxNumber)
                 .then(function (recordings) {
@@ -151,6 +173,7 @@ define([
                 keys,
                 i;
 
+
             /**
              STATE_ACTIVE_PROJECT_NAME: 'activeProjectName',
              STATE_ACTIVE_COMMIT: 'activeCommit',
@@ -172,6 +195,14 @@ define([
             delete uiState[CONSTANTS.STATE_ACTIVE_COMMIT];
             delete uiState[CONSTANTS.STATE_ACTIVE_BRANCH_NAME];
             delete uiState[CONSTANTS.STATE_LAYOUT];
+
+            function ensureActiveNodeLoaded() {
+                if (uiState[CONSTANTS.STATE_ACTIVE_OBJECT]) {
+                    return loadById(uiState[CONSTANTS.STATE_ACTIVE_OBJECT]);
+                } else {
+                    return Q();
+                }
+            }
 
             // Check which states are different from the current one - delete those that aren't.
             keys = Object.keys(uiState);
@@ -196,7 +227,11 @@ define([
                     deferred.resolve(uiState);
                 } else {
                     setTimeout(function () {
-                        deferred.resolve(uiState);
+                        ensureActiveNodeLoaded()
+                            .then(() => {
+                                deferred.resolve(uiState);
+                            });
+
                     }, delay);
                 }
             } else {
@@ -214,32 +249,38 @@ define([
                     delayedState[CONSTANTS.STATE_ACTIVE_SELECTION] = uiState[CONSTANTS.STATE_ACTIVE_SELECTION];
                     delete uiState[CONSTANTS.STATE_ACTIVE_SELECTION];
 
-                    // .. first set the state w/o the selection..
-                    WebGMEGlobal.State.set(uiState, {suppressVisualizerFromNode: true});
-                    setTimeout(function () {
-                        // .. then we update the active selection.
-                        WebGMEGlobal.State.set(delayedState, {suppressVisualizerFromNode: true});
+                    ensureActiveNodeLoaded()
+                        .then(() => {
+                            // .. first set the state w/o the selection..
+                            WebGMEGlobal.State.set(uiState, {suppressVisualizerFromNode: true});
+                            setTimeout(function () {
+                                // .. then we update the active selection.
+                                WebGMEGlobal.State.set(delayedState, {suppressVisualizerFromNode: true});
 
-                        // Add it back for UI feedback.
-                        uiState[CONSTANTS.STATE_ACTIVE_SELECTION] = delayedState[CONSTANTS.STATE_ACTIVE_SELECTION];
-                        if (newVisualizer) {
-                            uiState[CONSTANTS.STATE_ACTIVE_VISUALIZER] = newVisualizer;
-                        }
+                                // Add it back for UI feedback.
+                                uiState[CONSTANTS.STATE_ACTIVE_SELECTION] = delayedState[CONSTANTS.STATE_ACTIVE_SELECTION];
+                                if (newVisualizer) {
+                                    uiState[CONSTANTS.STATE_ACTIVE_VISUALIZER] = newVisualizer;
+                                }
 
-                        deferred.resolve(uiState);
-                    }, delay * 2);
+                                deferred.resolve(uiState);
+                            }, delay * 2);
+                        });
 
                 } else {
                     // There's no active-selection we can set the entire new state.
-                    WebGMEGlobal.State.set(uiState, {suppressVisualizerFromNode: true});
-                    setTimeout(function () {
+                    ensureActiveNodeLoaded()
+                        .then(() => {
+                            WebGMEGlobal.State.set(uiState, {suppressVisualizerFromNode: true});
+                            setTimeout(function () {
 
-                        if (newVisualizer) {
-                            uiState[CONSTANTS.STATE_ACTIVE_VISUALIZER] = newVisualizer;
-                        }
+                                if (newVisualizer) {
+                                    uiState[CONSTANTS.STATE_ACTIVE_VISUALIZER] = newVisualizer;
+                                }
 
-                        deferred.resolve(uiState);
-                    }, delay);
+                                deferred.resolve(uiState);
+                            }, delay);
+                        });
                 }
             }
 
